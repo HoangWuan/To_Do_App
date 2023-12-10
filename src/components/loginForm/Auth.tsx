@@ -1,4 +1,4 @@
-import { auth, googleProvider } from "../config/firebase-config";
+import { auth, googleProvider } from "../../config/firebase-config";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,

@@ -4,6 +4,12 @@ import { useEffect } from "react";
 
 const tasksCollectionRef = collection(db, "tasks");
 
+export interface Task {
+  id: string;
+  name: string;
+  timeCreate: number;
+  checked: boolean;
+}
 
 export const getMovieList = async (setMovieList: any) => {
   try {
@@ -16,12 +22,6 @@ export const getMovieList = async (setMovieList: any) => {
   }
 };
 
-export interface Task {
-  id: string;
-  name: string;
-  timeCreate: number;
-  checked: boolean;
-}
 
 export const addTask = async (newTask: Task) => {
   try {
@@ -40,7 +40,6 @@ export const checkTask = async(id: string) => {
     if(!querySnapshot.empty){
       const taskDoc = querySnapshot.docs[0];
       const taskDocRef = doc(db, "tasks", taskDoc.id);
-      console.log(taskDoc.data());
       await updateDoc(taskDocRef, { checked:!taskDoc.data().checked });
     }
   }catch(error: any) {

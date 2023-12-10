@@ -73,7 +73,6 @@ const List = ({ items, setData }: { items: Task[]; setData: any }) => (
 function ListGroup() {
   const noData: Task[] = [];
   const [data, setData] = useState(noData);
-  console.log(data);
   useEffect(() => {
     getMovieList(setData);
   }, []);
