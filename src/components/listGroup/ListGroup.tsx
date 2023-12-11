@@ -6,12 +6,16 @@ import {
   checkTask,
   deleteTask,
   getMovieList,
-} from "../data/Task";
-import { formatDate, formatDateAgo } from "../util/MyUtil";
-import ProgressBar from "../util/progress";
+  getMovieListById,
+} from "../../data/Task";
+import { formatDate, formatDateAgo } from "../../util/MyUtil";
+import ProgressBar from "../../util/progress";
 
 //css part
-import "../assets/ListGroup.css";
+import "../../assets/ListGroup.css";
+import { auth } from "../../config/firebase-config";
+import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 const handleCheck = (id: string, setData: any, data: Task[]) => {
   setData((prevData: Task[]) =>
@@ -70,29 +74,54 @@ const List = ({ items, setData }: { items: Task[]; setData: any }) => (
   </>
 );
 
+//this is main component
+
 function ListGroup() {
+  const navigate = useNavigate();
   const noData: Task[] = [];
   const [data, setData] = useState(noData);
   useEffect(() => {
-    getMovieList(setData);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        getMovieListById(setData, auth.currentUser?.uid);
+      }else{
+        navigate("/");
+      }
+    });
   }, []);
   return (
-    <div className="Container d-flex" style={{flexDirection: "column", justifyContent: 'flex-end'}} >
-      {data.length === 0 && <h1>No item yet</h1>}
-      <div className="d-flex gap-3" style ={{flex:1, justifyContent: "center", overflow:'auto', maxHeight:''}} >
-        <ul className="list-group grid gap-2">
-          <List
-            items={data.filter((item) => !item.checked)}
-            setData={setData}
-          />
-        </ul>
-        <ul className="list-group grid gap-2">
-          <List items={data.filter((item) => item.checked)} setData={setData} />
-        </ul>
+    <div className="border border-1 rounded d-flex" style={{ flex: 1 }}>
+      <div
+        className="Container d-flex"
+        style={{ flexDirection: "column", justifyContent: "flex-end" }}
+      >
+        {data.length === 0 && <h1>No item yet</h1>}
+        <div
+          className="d-flex gap-3"
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            overflow: "auto",
+            maxHeight: "",
+          }}
+        >
+          <ul className="list-group grid gap-2">
+            <List
+              items={data.filter((item) => !item.checked)}
+              setData={setData}
+            />
+          </ul>
+          <ul className="list-group grid gap-2">
+            <List
+              items={data.filter((item) => item.checked)}
+              setData={setData}
+            />
+          </ul>
+        </div>
+        <SubmitField data={data} setData={setData} />
+        <br />
+        {/* <ProgressBar progress={50} variant="success" label="Loading..." /> */}
       </div>
-      <SubmitField data={data} setData={setData} />
-      <br />
-      {/* <ProgressBar progress={50} variant="success" label="Loading..." /> */}
     </div>
   );
 }

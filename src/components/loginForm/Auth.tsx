@@ -89,16 +89,6 @@ export function AuthRegister({login, setLogin} : {login: boolean, setLogin: any}
             <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
           </button>
         </div>
-        <div className="mb-3 form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-          />
-          <label className="form-check-label" htmlFor="exampleCheck1">
-            Save Login
-          </label>
-        </div>
         <div className="d-flex gap-3">
           <button
             type="submit"
@@ -123,8 +113,11 @@ export function AuthLogin({login, setLogin} : {login: boolean, setLogin: any}) {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      setEmail("");
+      setPassword("");
       setLogin(true);
     } catch (error: any) {
+      console.log(error.message);
       alert(error.message);
     }
   }
@@ -166,22 +159,12 @@ export function AuthLogin({login, setLogin} : {login: boolean, setLogin: any}) {
           />
         </div>
         <div>
-          <button type="button" className="btn btn-outline-danger mb-3">
-            <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
+          <button type="button" className="btn btn-outline-danger mb-3" onClick={handleRegisterWithGoogle} >
+            <FontAwesomeIcon icon={faGoogle}/> Sign in with Google
           </button>
         </div>
-        <div className="mb-3 form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-          />
-          <label className="form-check-label" htmlFor="exampleCheck1">
-            Save Login
-          </label>
-        </div>
         <div className="d-flex gap-3">
-          <button type="button" className="btn btn-primary">
+          <button type="button" className="btn btn-primary" onClick={handleLogin}>
             Login
           </button>
           <button type="button" className="btn btn-danger" onClick={() => setLogin(false)} >

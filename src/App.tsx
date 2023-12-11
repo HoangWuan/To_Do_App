@@ -1,23 +1,30 @@
-import ListGroup from "./components/ListGroup";
-import LoginForm from "./components/loginForm/LoginForm";
-import "./App.css"
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
+import "./App.css";
+import ListGroup from "./components/listGroup/ListGroup"; // Import your components
+import LoginForm from "./components/loginForm/LoginForm"; // Import your components
+import { auth } from "./config/firebase-config";
 
 function App() {
   return (
-    <div className="d-flex align-items-center justify-content-center h-100 ">
-      <div className="todo" >
-        <h1 className="heading">TO DO APP</h1>
-        {/* <div className="border border-1 rounded d-flex" style={{ flex: 1 }}>
-          <ListGroup></ListGroup>
-          
-        </div> */}
-        <div className="d-flex" style={{ flex: 1 }}>
-          <LoginForm/>
-          
+    <BrowserRouter>
+      <div className="d-flex align-items-center justify-content-center h-100 ">
+        <div className="todo">
+          <h1 className="heading">TO DO APP</h1>
+          <Routes>
+            <Route index element={<Navigate to="/login" />} />
+            <Route path="/tasks" element={<ListGroup />} />
+            <Route path="/login" element={<LoginForm />} />
+          </Routes>
         </div>
-        
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
+
 export default App;

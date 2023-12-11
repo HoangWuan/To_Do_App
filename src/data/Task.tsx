@@ -6,6 +6,7 @@ const tasksCollectionRef = collection(db, "tasks");
 
 export interface Task {
   id: string;
+  userId: string | undefined;
   name: string;
   timeCreate: number;
   checked: boolean;
@@ -22,6 +23,17 @@ export const getMovieList = async (setMovieList: any) => {
   }
 };
 
+export const getMovieListById = async (setMovieList: any, userId: string | undefined) => {
+  try {
+    const data = await getDocs(tasksCollectionRef);
+    const filteredData = data.docs.map((doc) => ({
+      ...doc.data(),
+    }));
+    setMovieList(filteredData.filter((task) => task.userId === userId))
+  } catch (err) {
+    alert(err);
+  }
+};
 
 export const addTask = async (newTask: Task) => {
   try {
