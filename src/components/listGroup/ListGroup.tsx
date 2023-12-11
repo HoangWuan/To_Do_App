@@ -8,7 +8,7 @@ import {
   getMovieList,
   getMovieListById,
 } from "../../data/Task";
-import { formatDate, formatDateAgo } from "../../util/MyUtil";
+import { formatDate, formatDateAgo, sortByDate } from "../../util/MyUtil";
 import ProgressBar from "../../util/progress";
 
 //css part
@@ -18,10 +18,11 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 
 const handleCheck = (id: string, setData: any, data: Task[]) => {
-  setData((prevData: Task[]) =>
-    prevData.map((task: Task) =>
+  setData((prevData: Task[]) =>{
+    sortByDate(prevData);
+    return prevData.map((task: Task) =>
       task.id === id ? { ...task, checked: !task.checked } : task
-    )
+    )}
   );
   checkTask(id);
 };
@@ -31,10 +32,10 @@ const handleDelete = (id: string, setData: any, data: Task[]) => {
     "Are you sure you want to delete this task?"
   );
   isDeleted
-    ? setData((prevData: Task[]) =>
-        prevData.filter((task: Task) => task.id !== id)
-      )
-    : null;
+    ? setData((prevData: Task[]) => {
+      sortByDate(prevData);
+      return prevData.filter((task: Task) => task.id !== id)
+    }) : null;
 
   deleteTask(id);
 };

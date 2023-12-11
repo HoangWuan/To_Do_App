@@ -1,3 +1,5 @@
+import { Task } from "../data/Task";
+
 export const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp);
     // Adjust the format as needed, for example: 'MM/DD/YYYY hh:mm A'
@@ -22,3 +24,7 @@ export const formatDate = (timestamp: number): string => {
       return `${days} day${days > 1 ? "s" : ""} ago`;
     }
   };
+
+export const sortByDate = (tasks: Task[]) => {
+  tasks.sort((a, b) => b.timeCreate - a.timeCreate);
+}

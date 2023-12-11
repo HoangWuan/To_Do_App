@@ -1,4 +1,4 @@
-import { collection, getDocs, addDoc, query, where, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, query, where, deleteDoc, doc, updateDoc, orderBy } from "firebase/firestore";
 import { db } from "../config/firebase-config";
 import { useEffect } from "react";
 
@@ -25,12 +25,14 @@ export const getMovieList = async (setMovieList: any) => {
 
 export const getMovieListById = async (setMovieList: any, userId: string | undefined) => {
   try {
-    const data = await getDocs(tasksCollectionRef);
+    const q = query(tasksCollectionRef, orderBy('timeCreate', 'desc') ,where("userId", "==", userId));
+    const data = await getDocs(q);
     const filteredData = data.docs.map((doc) => ({
       ...doc.data(),
     }));
-    setMovieList(filteredData.filter((task) => task.userId === userId))
+    setMovieList(filteredData)
   } catch (err) {
+    console.log(err)
     alert(err);
   }
 };
